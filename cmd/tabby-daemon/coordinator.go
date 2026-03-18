@@ -6650,12 +6650,14 @@ func (c *Coordinator) generateWidgetZones(width int) (string, []daemon.Clickable
 	topContent, topRegions := c.renderWidgetZone(topEntries, width)
 
 	// Add resize buttons to bottom (always last)
-	bottomEntries = append(bottomEntries, widgetEntry{
-		name:     "resize_buttons",
-		zone:     "bottom",
-		priority: 9999,
-		content:  c.renderSidebarResizeButtons(width),
-	})
+	if !c.config.Sidebar.DisableLargeMode {
+		bottomEntries = append(bottomEntries, widgetEntry{
+			name:     "resize_buttons",
+			zone:     "bottom",
+			priority: 9999,
+			content:  c.renderSidebarResizeButtons(width),
+		})
+	}
 
 	// Render bottom zone
 	bottomContent, bottomRegions := c.renderWidgetZone(bottomEntries, width)
