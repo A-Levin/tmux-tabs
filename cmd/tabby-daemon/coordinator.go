@@ -5515,7 +5515,9 @@ func (c *Coordinator) generateMainContent(clientID string, width, height int) (s
 
 			// Window tree branch
 			var treeBranch string
-			if isLastInGroup {
+			if c.config.Sidebar.HideGroupLabels {
+				treeBranch = "  "
+			} else if isLastInGroup {
 				treeBranch = treeBranchLastChar
 			} else {
 				treeBranch = treeBranchChar
@@ -5559,6 +5561,9 @@ func (c *Coordinator) generateMainContent(clientID string, width, height int) (s
 			// Calculate widths
 			// All windows: indicator(1) + branch first char(1) + [collapse icon or branch second char](1) = 3
 			prefixWidth := 3
+			if c.config.Sidebar.HideGroupLabels {
+				prefixWidth = 0
+			}
 			menuBtnW := 2 // " ⋮"
 			windowContentWidth := width - prefixWidth - menuBtnW
 
@@ -5626,7 +5631,10 @@ func (c *Coordinator) generateMainContent(clientID string, width, height int) (s
 				// Build prefix (indicator + tree branch) separately from content
 				// so background color only applies to the content portion
 				var prefix, content string
-				if hasPanes {
+				if c.config.Sidebar.HideGroupLabels {
+					prefix = ""
+					content = contentText
+				} else if hasPanes {
 					treeBranchRunes := []rune(treeBranch)
 					treeBranchFirst := string(treeBranchRunes[0])
 					prefix = indicatorPart + treeStyle.Render(treeBranchFirst) + windowCollapseStyle.Render(windowCollapseIcon)
