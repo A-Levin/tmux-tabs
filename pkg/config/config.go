@@ -313,6 +313,7 @@ type Sidebar struct {
 	Colors               SidebarColors `yaml:"colors"`                 // Manual color overrides (applied on top of theme)
 	TouchButtons         TouchButtons  `yaml:"touch_buttons"`          // Touch mode button styling
 	HidePredefinedColors bool          `yaml:"hide_predefined_colors"` // Hide predefined color palette in context menus (keep Custom + Reset)
+	HideGroupLabels      bool          `yaml:"hide_group_labels"`      // Hide group header rows, show windows flat
 }
 
 // TouchButtons configures colors for touch mode buttons

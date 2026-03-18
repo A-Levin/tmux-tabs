@@ -4980,10 +4980,14 @@ func (c *Coordinator) getWindowTabColors(windowID string, isActive bool) (string
 // Returns the header content string (with trailing newline) and click regions.
 // Left-click collapses sidebar. Right-click opens settings context menu.
 func (c *Coordinator) generateSidebarHeader(width int, clientID string) (string, []daemon.ClickableRegion) {
+	hdr := c.config.Sidebar.Header
+	if hdr.Height <= 0 {
+		return "", nil
+	}
+
 	var s strings.Builder
 	var regions []daemon.ClickableRegion
 
-	hdr := c.config.Sidebar.Header
 	headerText := hdr.Text
 	headerHeight := hdr.Height
 	paddingBottom := hdr.PaddingBottom
@@ -5227,7 +5231,9 @@ func (c *Coordinator) generateMainContent(clientID string, width, height int) (s
 		hasWindows := len(group.Windows) > 0
 
 		// Render group header - touch mode uses bordered button, normal mode uses inline
-		if c.isTouchMode(width) {
+		if c.config.Sidebar.HideGroupLabels {
+			// skip group header row entirely
+		} else if c.isTouchMode(width) {
 			// Build header label with collapse icon (if has windows)
 			var headerLabel string
 			if hasWindows {
